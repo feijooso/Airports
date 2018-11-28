@@ -6,7 +6,7 @@
 #define LARGO_INICIAL 50
 #define CARGA 0.53
 
-typedef void (*hash_destruir_dato_t)(void *);
+typedef void (*hash_destruir_dato_t)(char**);
 
 typedef enum estado {
 	libre,
@@ -52,7 +52,7 @@ void hash_destruir(hash_t* hash) {
 		if(campo->estado != libre) {
 			free(campo->clave);
 		}
-		if(campo->estado == ocupado && hash->destruir_dato != NULL) hash->destruir_dato(campo->valor);
+		if(campo->estado == ocupado && hash->destruir_dato != NULL) hash->destruir_dato((char**)campo->valor);
 		free(campo);
 	}
 	free(hash->tabla);

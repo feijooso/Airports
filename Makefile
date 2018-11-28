@@ -1,12 +1,12 @@
 EXEC = tp2
 OBJ_FILES = algueiza.c hash.c strutil.c
 C_FLAGS = -g -std=c99 -Wall -Wtype-limits -pedantic -Wconversion -Wno-sign-conversion
+TEST_FILES = f1.csv
 
 all:
 	gcc -g $(C_FLAGS) -o $(EXEC) $(OBJ_FILES)
 
 run:	all
-	clear
 	./$(EXEC)
 
 valgrind:	all
