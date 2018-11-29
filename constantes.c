@@ -8,3 +8,5 @@
 #define RETRASO 7
 #define TIEMPO_DE_VUELO 8
 #define CANCELADO 9
+
+#define EOF (-1)
