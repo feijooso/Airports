@@ -10,3 +10,5 @@
 #define CANCELADO 9
 
 #define EOF (-1)
+
+#define CANTIDAD_PARAMETROS_AGREGAR_ARCHIVO 1

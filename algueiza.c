@@ -42,7 +42,14 @@ void operar(char* input[], aerolinea_t* aerolinea) {
         return;
     }
     if(strcmp(input[pos], "agregar_archivo") == 0) {
-        agregar_archivo(aerolinea, input, pos+1);
+        pos++;
+        char* parametros[CANTIDAD_PARAMETROS_AGREGAR_ARCHIVO];
+        if(cantidad_parametros_correctos(input, pos, CANTIDAD_PARAMETROS_AGREGAR_ARCHIVO, parametros) 
+         && agregar_archivo(aerolinea, parametros, pos+1)) {
+            printf("OK\n");         
+        } else {
+            printf("error\n");
+        }
     } else if(strcmp(input[pos], "ver_tablero") == 0) {
         printf("ver_tablero\n");
     } else if(strcmp(input[pos], "info_vuelo") == 0) {

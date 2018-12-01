@@ -7,12 +7,12 @@
 #include <stdlib.h>
 #include "pila.h"
 
-typedef struct abb_nodo {
+struct abb_nodo {
     struct abb_nodo* izq;
     struct abb_nodo* der;
     char* clave;
     void* dato;
-} abb_nodo_t;
+};
 
 struct abb {
     abb_nodo_t* raiz;
@@ -21,12 +21,11 @@ struct abb {
     size_t cantidad;
 };
 
-typedef struct abb_iter {
+struct abb_iter {
     const abb_t* arbol;
     abb_nodo_t* actual;
     pila_t* pila;
-
-}abb_iter_t;
+};
 
 /* FUNCIONES AUXILIARES */
 
@@ -95,7 +94,7 @@ abb_t* abb_crear(abb_comparar_clave_t cmp, abb_destruir_dato_t destruir_dato) {
     return arbol;
 }
 
-bool abb_guardar(abb_t* arbol, const char* clave, void* dato) {
+abb_nodo_t* abb_guardar(abb_t* arbol, const char* clave, void* dato) {
 
     if (abb_pertenece(arbol, clave)) { // reemplazar
         abb_nodo_t* nodo1 = buscar_nodo(arbol, arbol->raiz, clave);
@@ -103,11 +102,11 @@ bool abb_guardar(abb_t* arbol, const char* clave, void* dato) {
             arbol->destruir_dato(nodo1->dato);
         }
         nodo1->dato = dato;
-        return true;
+        return nodo1;
     }
     //guardar
     abb_nodo_t* nodo_nuevo = crear_nodo(clave, dato);
-    if (nodo_nuevo == NULL) return false;
+    if (nodo_nuevo == NULL) return NULL;
 
     if (arbol->raiz == NULL) {
         arbol->raiz = nodo_nuevo;
@@ -123,7 +122,7 @@ bool abb_guardar(abb_t* arbol, const char* clave, void* dato) {
     }
     arbol->cantidad++;
 
-    return true;
+    return nodo_nuevo;
 }
 
 void* abb_borrar(abb_t* arbol, const char* clave) {
@@ -261,7 +260,7 @@ abb_iter_t *abb_iter_in_crear(const abb_t *arbol, char* clave) {
         iter->actual = NULL;
         return iter;
     }
-    abb_nodo_t* nodo = buscar_padre(arbol, clave);
+    abb_nodo_t* nodo = buscar_padre(arbol, arbol->raiz, clave);
     pila_apilar(iter->pila, nodo);
     while(nodo->izq != NULL){
         pila_apilar(iter->pila, nodo->izq);

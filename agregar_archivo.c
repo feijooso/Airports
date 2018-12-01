@@ -8,7 +8,6 @@
 
 #define max_cantidad_separaciones 2
 #define formato_valido "csv"
-#define cantidad_parametros 1
 
 bool es_formato_valido(char* nombre_archivo) {
     char** archivo_valido = split(nombre_archivo, '.');
@@ -33,33 +32,22 @@ bool leer_archivo(aerolinea_t* aerolinea, FILE* archivo) {
         char** vuelo = split(linea, ',');
         size_t posicion_ultimo_dato = CANCELADO;
         remover_enter(vuelo, &posicion_ultimo_dato);
-        if(!hash_guardar(aerolinea->hash, vuelo[ID], vuelo)) {
-            free_strv(vuelo);
+        abb_nodo_t* abb_nodo = abb_guardar(aerolinea->abb, vuelo[ID], vuelo);
+        if(abb_nodo == NULL) return false;
+        if(!hash_guardar(aerolinea->hash, vuelo[ID], abb_nodo)) {
+            abb_borrar(aerolinea->abb, vuelo[ID]);
             fclose(archivo);
             return false;
         }
     }
     free(linea);
     fclose(archivo);
-    printf("OK\n");
     return true;
 }
 
-bool agregar_archivo(aerolinea_t* aerolinea, char* input[], size_t pos) {
-    char* parametros[cantidad_parametros];
-    if(!cantidad_parametros_correctos(input, pos, cantidad_parametros, parametros)) {
-        fprintf(stderr, "error\n");
-        return false;
-    }
-    if(!es_formato_valido(parametros[0])) {
-        fprintf(stderr, "archivo invalido\n");
-        return false;
-    }
+bool agregar_archivo(aerolinea_t* aerolinea, char* parametros[], size_t pos) {
+    if(!es_formato_valido(parametros[0])) return false;
     FILE* archivo = fopen(parametros[0], "r");
-    if(archivo == NULL) {
-        fprintf(stderr, "No se pudo leer el archivo indicado\n");
-		return false;
-    }
-
+    if(archivo == NULL) return false;
     return leer_archivo(aerolinea, archivo);
 }
