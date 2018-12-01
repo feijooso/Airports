@@ -5,12 +5,33 @@
 #include <string.h>
 #include <ctype.h>
 #include "strutil.h"
-#include "utils.c"
+#include "algueiza.h"
 #include "agregar_archivo.c"
-#include "constantes.c"
-#include "hash.h"
 
-void operar(char* input[], hash_t* hash) {
+aerolinea_t* aerolinea_crear(abb_comparar_clave_t cmp, abb_destruir_dato_t destruir_dato_abb, hash_destruir_dato_t destruir_dato_hash) {
+    aerolinea_t* aerolinea = malloc(sizeof(aerolinea_t));
+    if(aerolinea == NULL) return NULL;
+    aerolinea->hash = hash_crear(destruir_dato_hash);
+    if(aerolinea->hash == NULL) {
+        free(aerolinea);
+        return NULL;
+    }
+    aerolinea->abb = abb_crear(cmp, destruir_dato_abb);
+    if(aerolinea->abb == NULL) {
+        hash_destruir(aerolinea->hash);
+        free(aerolinea);
+        return NULL;
+    }
+    return aerolinea;
+}
+
+void aerolinea_destruir(aerolinea_t* aerolinea) {
+    hash_destruir(aerolinea->hash);
+    abb_destruir(aerolinea->abb);
+    free(aerolinea);
+}
+
+void operar(char* input[], aerolinea_t* aerolinea) {
     size_t pos = 0;
     if(!iterar_hasta_palabra_valida(input, &pos)) {
         printf("error\n");
@@ -21,7 +42,7 @@ void operar(char* input[], hash_t* hash) {
         return;
     }
     if(strcmp(input[pos], "agregar_archivo") == 0) {
-        agregar_archivo(hash, input, pos+1);
+        agregar_archivo(aerolinea, input, pos+1);
     } else if(strcmp(input[pos], "ver_tablero") == 0) {
         printf("ver_tablero\n");
     } else if(strcmp(input[pos], "info_vuelo") == 0) {
@@ -39,19 +60,19 @@ int main() {
     char* linea = NULL;
     size_t leido = 0;
     size_t variable_inutil = 0;
-    hash_t* hash = hash_crear(free_strv);
-    if(hash == NULL) return 0;
+    aerolinea_t* aerolinea = aerolinea_crear(strcmp, free, free_strv);
+    if(aerolinea == NULL) return 0;
     while((leido = getline(&linea, &variable_inutil, stdin)) != EOF) {
         char** input = split(linea, ' ');
         if(input == NULL) {
             linea = NULL;
             fprintf(stdout, "ERROR\n");
         } else {
-            operar(input, hash);
+            operar(input, aerolinea);
         }
         free_strv(input);
     }
     free(linea);
-    hash_destruir(hash);
+    aerolinea_destruir(aerolinea);
     return 0;    
 }

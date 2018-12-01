@@ -5,8 +5,6 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "strutil.h"
-#include "constantes.c"
-#include "hash.h"
 
 #define max_cantidad_separaciones 2
 #define formato_valido "csv"
@@ -27,7 +25,7 @@ bool es_formato_valido(char* nombre_archivo) {
     return true;
 }
 
-void leer_archivo(hash_t* hash, FILE* archivo) {
+bool leer_archivo(aerolinea_t* aerolinea, FILE* archivo) {
     char* linea = NULL;
     size_t variable_inutil = 0;
     size_t leido = 0;
@@ -35,31 +33,33 @@ void leer_archivo(hash_t* hash, FILE* archivo) {
         char** vuelo = split(linea, ',');
         size_t posicion_ultimo_dato = CANCELADO;
         remover_enter(vuelo, &posicion_ultimo_dato);
-        if(!hash_guardar(hash, vuelo[ID], vuelo)) {
+        if(!hash_guardar(aerolinea->hash, vuelo[ID], vuelo)) {
             free_strv(vuelo);
-            return;
+            fclose(archivo);
+            return false;
         }
     }
     free(linea);
+    fclose(archivo);
     printf("OK\n");
+    return true;
 }
 
-void agregar_archivo(hash_t* hash, char* input[], size_t pos) {
+bool agregar_archivo(aerolinea_t* aerolinea, char* input[], size_t pos) {
     char* parametros[cantidad_parametros];
     if(!cantidad_parametros_correctos(input, pos, cantidad_parametros, parametros)) {
         fprintf(stderr, "error\n");
-        return;
+        return false;
     }
     if(!es_formato_valido(parametros[0])) {
         fprintf(stderr, "archivo invalido\n");
-        return;
+        return false;
     }
     FILE* archivo = fopen(parametros[0], "r");
     if(archivo == NULL) {
         fprintf(stderr, "No se pudo leer el archivo indicado\n");
-		return;
+		return false;
     }
 
-    leer_archivo(hash, archivo);
-    fclose(archivo);
+    return leer_archivo(aerolinea, archivo);
 }
