@@ -9,6 +9,25 @@
 #define max_cantidad_separaciones 2
 #define formato_valido "csv"
 
+char* generar_clave_fecha_id(char* fecha, char* id) {
+    size_t fecha_largo = strlen(fecha);
+    size_t id_largo = strlen(id);
+    size_t respuesta_largo = fecha_largo + id_largo + 2; //fecha-id\0;
+    char* respuesta = malloc(sizeof(char) * respuesta_largo);
+    if(respuesta == NULL) return NULL;
+    size_t i = 0;
+    for(; i<fecha_largo; i++) {
+        respuesta[i] = fecha[i];
+    }
+    respuesta[i] = '-';
+    for(size_t n=0; n<id_largo; n++) {
+        i++;
+        respuesta[i] = id[n];
+    }
+    respuesta[i+1] = '\0';
+    return respuesta;
+}
+
 bool es_formato_valido(char* nombre_archivo) {
     char** archivo_valido = split(nombre_archivo, '.');
     if(archivo_valido == NULL) return false;
@@ -32,7 +51,10 @@ bool leer_archivo(aerolinea_t* aerolinea, FILE* archivo) {
         char** vuelo = split(linea, ',');
         size_t posicion_ultimo_dato = CANCELADO;
         remover_enter(vuelo, &posicion_ultimo_dato);
+        char* abb_clave = generar_clave_fecha_id(vuelo[FECHA], vuelo[ID]);
+        if(abb_clave == NULL) return false;
         abb_nodo_t* abb_nodo = abb_guardar(aerolinea->abb, vuelo[ID], vuelo);
+        free(abb_clave);
         if(abb_nodo == NULL) return false;
         if(!hash_guardar(aerolinea->hash, vuelo[ID], abb_nodo)) {
             abb_borrar(aerolinea->abb, vuelo[ID]);
