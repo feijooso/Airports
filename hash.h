@@ -12,7 +12,7 @@ typedef struct hash hash_t;
 typedef struct hash_iter hash_iter_t;
 
 // tipo de función para destruir dato
-typedef void (*hash_destruir_dato_t)(char **);
+typedef void (*hash_destruir_dato_t)(void *);
 
 /* Crea el hash
  */

@@ -67,7 +67,7 @@ int main() {
     char* linea = NULL;
     size_t leido = 0;
     size_t variable_inutil = 0;
-    aerolinea_t* aerolinea = aerolinea_crear(strcmp, free, free_strv);
+    aerolinea_t* aerolinea = aerolinea_crear(strcmp, free, free);
     if(aerolinea == NULL) return 0;
     while((leido = getline(&linea, &variable_inutil, stdin)) != EOF) {
         char** input = split(linea, ' ');
