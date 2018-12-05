@@ -21,12 +21,11 @@ struct abb {
     size_t cantidad;
 };
 
-typedef struct abb_iter {
+struct abb_iter {
     const abb_t* arbol;
     abb_nodo_t* actual;
     pila_t* pila;
-
-}abb_iter_t;
+};
 
 /* FUNCIONES AUXILIARES */
 
@@ -261,7 +260,7 @@ abb_iter_t *abb_iter_in_crear(const abb_t *arbol, char* clave) {
         iter->actual = NULL;
         return iter;
     }
-    abb_nodo_t* nodo = buscar_padre(arbol, clave);
+    abb_nodo_t* nodo = buscar_padre(arbol, arbol->raiz, clave);
     pila_apilar(iter->pila, nodo);
     while(nodo->izq != NULL){
         pila_apilar(iter->pila, nodo->izq);

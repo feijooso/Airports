@@ -18,4 +18,4 @@ debug:	all
 	gdb -tui --args ./$(EXEC)
 
 zip: 
-	zip -r $(EXEC) algueiza.c algueiza.h utils.c heap.c heap.h abb.c abb.h hash.c hash.h strutil.c strutil.h testing.c testing.h -x "*.zip"
+	zip -r $(EXEC) pila.c pila h algueiza.c algueiza.h utils.c heap.c heap.h abb.c abb.h hash.c hash.h strutil.c strutil.h testing.c testing.h -x "*.zip"
