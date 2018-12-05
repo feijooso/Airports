@@ -17,7 +17,7 @@ aerolinea_t* aerolinea_crear(abb_comparar_clave_t cmp, abb_destruir_dato_t destr
         free(aerolinea);
         return NULL;
     }
-    aerolinea->abb = abb_crear(cmp, NULL);
+    aerolinea->abb = abb_crear(cmp, destruir_dato_abb);
     if(aerolinea->abb == NULL) {
         hash_destruir(aerolinea->hash);
         free(aerolinea);
@@ -81,7 +81,7 @@ int main() {
     char* linea = NULL;
     size_t leido = 0;
     size_t variable_inutil = 0;
-    aerolinea_t* aerolinea = aerolinea_crear(strcmp, free, free);
+    aerolinea_t* aerolinea = aerolinea_crear(strcmp, NULL, free_strv);
     if(aerolinea == NULL) return 0;
     while((leido = getline(&linea, &variable_inutil, stdin)) != EOF) {
         char** input = split(linea, ' ');

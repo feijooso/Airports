@@ -6,7 +6,7 @@
 #define LARGO_INICIAL 50
 #define CARGA 0.53
 
-typedef void (*hash_destruir_dato_t)(void*);
+typedef void (*hash_destruir_dato_t)(char**);
 
 typedef enum estado {
 	libre,
