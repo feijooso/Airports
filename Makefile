@@ -1,5 +1,5 @@
 EXEC = tp2
-OBJ_FILES = algueiza.c hash.c strutil.c abb.c pila.c
+OBJ_FILES = algueiza.c hash.c strutil.c abb.c pila.c heap.c
 C_FLAGS = -g -std=c99 -Wall -Wtype-limits -pedantic -Wconversion -Wno-sign-conversion
 TEST_FILES = f1.csv
 

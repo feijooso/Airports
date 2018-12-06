@@ -8,6 +8,7 @@
 #include "algueiza.h"
 #include "agregar_archivo.c"
 #include "info_vuelos.c"
+#include "prioridades.c"
 
 aerolinea_t* aerolinea_crear(abb_comparar_clave_t cmp, abb_destruir_dato_t destruir_dato_abb, hash_destruir_dato_t destruir_dato_hash) {
     aerolinea_t* aerolinea = malloc(sizeof(aerolinea_t));
@@ -69,7 +70,15 @@ void operar(char* input[], aerolinea_t* aerolinea) {
 
 
     } else if(strcmp(input[pos], "prioridad_vuelos") == 0) {
-        printf("prioridad_vuelos\n");
+        pos++;
+        char* parametros[CANTIDAD_PARAMETROS_PRIORIDADES];
+        if(cantidad_parametros_correctos(input, pos, CANTIDAD_PARAMETROS_PRIORIDADES, parametros)
+           && prioridad_vuelos(parametros,aerolinea)) {
+            printf("OK\n");
+        } else {
+            printf("error\n");
+        }
+
     } else if(strcmp(input[pos], "borrar") == 0) {
         printf("borrar\n");
     } else {
