@@ -34,7 +34,8 @@ bool prioridad_vuelos(char* input[], aerolinea_t* vuelos){
 		char* tope = heap_ver_max(heap_minimos); 
 		char** tope_splited = split(tope, ',');
 		int x = atoi(tope_splited[PRIORIDAD]);
-		if (vuelo[PRIORIDAD] > x){
+		int y = atoi(vuelo[PRIORIDAD]);
+		if (y > x){
 			heap_desencolar(heap_minimos);
 			heap_encolar(heap_minimos, info_joined);
 		}
