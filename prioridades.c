@@ -4,13 +4,17 @@
 #include <string.h>
 #include "heap.h"
 #include "strutil.h"
+#include "constantes.c"
+#include "hash.h"
 
 
 int minimos(const void* a, const void* b){ //recibe una tupla (id y priori)
 	char** valoresa = split(a, ',');
 	char** valoresb = split(b, ',');
-	if(valoresa[PRIORIDAD] == valoresb[PRIORIDAD]) return 0; //compara prioridades
-	if(valoresa[PRIORIDAD] < valoresb[PRIORIDAD]) return 1;
+    int pa = atoi(valoresa[PRIORIDAD]);
+    int pb = atoi(valoresb[PRIORIDAD]);
+	if(pa == pb) return 0; //compara prioridades
+	if(pa < pb) return 1;
 	return -1;
 }
 
@@ -42,14 +46,24 @@ bool prioridad_vuelos(char* input[], aerolinea_t* vuelos){
 		hash_iter_avanzar(iter);
 	}
 
-	for (int i = 0; i < n; i++)
-	{
-		char* imprimir = heap_desencolar(heap_minimos);
-		char** splited = split(imprimir, ',');
-		printf("%s ",splited[PRIORIDAD]);
-		printf("%s ","-");
+	int tam;
+	if (n > heap_cantidad(heap_minimos)) tam = heap_cantidad(heap_minimos);
+	else tam = n;
+
+    char* vector[tam];
+
+    for (int j = 0; j < n; j++) {
+        vector[j] = heap_desencolar(heap_minimos);
+    }
+
+    for (int k = tam-1; k >= 0; k--) {
+
+        char** splited = split(vector[k], ',');
+        printf("%s ",splited[PRIORIDAD]);
+        printf("%s ","-");
         printf("%s\n",splited[ID]);
-	}
+    }
+
 	return true;
 
 }
