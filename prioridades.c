@@ -13,18 +13,46 @@ int minimos(const void* a, const void* b){
 	char** valoresb = split(b, ',');
     int pa = atoi(valoresa[PRIORIDAD]);
     int pb = atoi(valoresb[PRIORIDAD]);
-    free_strv(valoresb);
+	int res;
+	if(pa == pb) {
+		int ia = atoi(valoresa[ID]);
+		int ib = atoi(valoresb[ID]);
+		if(ia == ib) {
+			res = 0;
+		} else if(ia < ib) {
+			res = -1;
+		} else {
+			res = 1;
+		}
+	} else if(pa < pb) {
+		res = 1;
+	} else {
+		res = -1;
+	}
+	free_strv(valoresb);
     free_strv(valoresa);
-	if(pa == pb) return 0; 
-	if(pa < pb) return 1;
-	return -1;
+	return res;
 }
 
-bool prioridad_vuelos(char* input[], aerolinea_t* vuelos){
-	heap_t* heap_minimos = heap_crear(minimos);
-	hash_iter_t* iter = hash_iter_crear(vuelos->hash);
-	int n = atoi(input[0]);
+bool isNumeric(const char *str) {
+    while(*str != '\0') {
+        if(*str < '0' || *str > '9')
+            return false;
+        str++;
+    }
+    return true;
+}
 
+bool prioridad_vuelos(char* input[], aerolinea_t* vuelos) {
+	if(!isNumeric(input[0])) return false;
+	int n = atoi(input[0]);
+	heap_t* heap_minimos = heap_crear(minimos);
+	if(heap_minimos == NULL) return false;
+	hash_iter_t* iter = hash_iter_crear(vuelos->hash);
+	if(iter == NULL) {
+		heap_destruir(heap_minimos, free);
+		return false;
+	}
 	for (int i = 0; i < n; ++i) {
 		if(!hash_iter_al_final(iter)){
 			char** vuelo = hash_obtener(vuelos->hash, hash_iter_ver_actual(iter));
