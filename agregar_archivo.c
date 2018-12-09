@@ -19,7 +19,7 @@ char* generar_clave_fecha_id(char* fecha, char* id) {
     for(; i<fecha_largo; i++) {
         respuesta[i] = fecha[i];
     }
-    respuesta[i] = '-';
+    respuesta[i] = '_';
     for(size_t n=0; n<id_largo; n++) {
         i++;
         respuesta[i] = id[n];

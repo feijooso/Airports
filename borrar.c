@@ -82,9 +82,29 @@ bool es_fecha_valida(char** formato_split) {
     return borrar_tres(formato_split, fecha, tiempo, true);
 }
 
-bool empezar_a_borrar(aerolinea_t* aerolinea, char* fecha_inicio, char* id_inicio, char* fecha_fin, char* id_fin) {
+bool empezar_a_borrar(aerolinea_t* aerolinea, char* fecha_inicio, char* fecha_fin) {
     abb_iter_t* iter = abb_iter_in_crear(aerolinea->abb, fecha_inicio);
     if(iter == NULL) return false;
+    if(abb_iter_in_al_final(iter)) return true;
+    char* abb_clave_actual = abb_iter_in_ver_actual(iter);
+    char** dato = split(abb_clave_actual, '_');
+    if(dato == NULL) return false;
+    while(!abb_iter_in_al_final(iter) && strcmp(dato[0], fecha_fin) < 0) {
+        if(strcmp(abb_clave_actual, fecha_inicio) >= 0) {
+            free_strv(abb_iter_borrar(iter));
+            hash_borrar(aerolinea->hash, dato[1]);
+        }
+        if(abb_iter_in_al_final(iter)) {
+            free_strv(dato);
+            break;
+        }
+        abb_clave_actual = abb_iter_in_ver_actual(iter);
+        free_strv(dato);
+        dato = split(abb_clave_actual, '_');
+    }
+
+    abb_iter_in_destruir(iter);
+    
     return true;
 }
 
@@ -93,6 +113,5 @@ bool borrar(aerolinea_t* aerolinea, char* parametros[]) {
     char** formato_fin = split(parametros[1], 'T');
     if(!es_fecha_valida(formato_inicio) || !es_fecha_valida(formato_fin)) 
         return false;    
-    bool respuesta = empezar_a_borrar(aerolinea, formato_inicio[0], formato_inicio[1], formato_fin[0], formato_fin[1]);
-    return borrar_dos(formato_inicio, formato_fin, respuesta);
+    return empezar_a_borrar(aerolinea, parametros[0], parametros[1]);
 }

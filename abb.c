@@ -22,7 +22,7 @@ struct abb {
 };
 
 struct abb_iter {
-    const abb_t* arbol;
+    abb_t* arbol;
     abb_nodo_t* actual;
     pila_t* pila;
 };
@@ -243,7 +243,7 @@ void abb_in_order(abb_t *arbol, bool visitar(const char *, void *, void *), void
 
 /* PRIMITIVAS Y FUNCIONES AUXILIARES ITERADOR EXTERNO */
 
-abb_iter_t *abb_iter_in_crear(const abb_t *arbol, char* clave) {
+abb_iter_t *abb_iter_in_crear(abb_t *arbol, char* clave) {
 
     abb_iter_t* iter = malloc(sizeof(abb_iter_t));
     if (iter == NULL) return NULL;
@@ -312,4 +312,11 @@ void abb_iter_in_destruir(abb_iter_t* iter) {
     pila_destruir(iter->pila);
     free(iter);
 
+}
+
+void* abb_iter_borrar(abb_iter_t* iter) {
+    if(abb_iter_in_al_final(iter)) return false;
+    abb_nodo_t* nodo_anterior = iter->actual;
+    abb_iter_in_avanzar(iter);
+    return abb_borrar(iter->arbol, nodo_anterior->clave);
 }
