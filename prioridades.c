@@ -8,12 +8,14 @@
 #include "hash.h"
 
 
-int minimos(const void* a, const void* b){ //recibe una tupla (id y priori)
+int minimos(const void* a, const void* b){ 
 	char** valoresa = split(a, ',');
 	char** valoresb = split(b, ',');
     int pa = atoi(valoresa[PRIORIDAD]);
     int pb = atoi(valoresb[PRIORIDAD]);
-	if(pa == pb) return 0; //compara prioridades
+    free_strv(valoresb);
+    free_strv(valoresa);
+	if(pa == pb) return 0; 
 	if(pa < pb) return 1;
 	return -1;
 }
@@ -40,19 +42,21 @@ bool prioridad_vuelos(char* input[], aerolinea_t* vuelos){
 		int x = atoi(tope_splited[PRIORIDAD]);
 		int y = atoi(vuelo[PRIORIDAD]);
 		if (y > x){
-			heap_desencolar(heap_minimos);
+			free(heap_desencolar(heap_minimos));
 			heap_encolar(heap_minimos, info_joined);
 		}
+		else free(info_joined);
+		free_strv(tope_splited);
 		hash_iter_avanzar(iter);
 	}
 
 	int tam;
-	if (n > heap_cantidad(heap_minimos)) tam = heap_cantidad(heap_minimos);
+	if (n > heap_cantidad(heap_minimos)) tam = (int)heap_cantidad(heap_minimos);
 	else tam = n;
 
     char* vector[tam];
 
-    for (int j = 0; j < n; j++) {
+    for (int j = 0; j < tam; j++) {
         vector[j] = heap_desencolar(heap_minimos);
     }
 
@@ -62,8 +66,12 @@ bool prioridad_vuelos(char* input[], aerolinea_t* vuelos){
         printf("%s ",splited[PRIORIDAD]);
         printf("%s ","-");
         printf("%s\n",splited[ID]);
+        free_strv(splited);
+        free(vector[k]);
     }
 
+    hash_iter_destruir(iter);
+    heap_destruir(heap_minimos, free);
 	return true;
 
 }

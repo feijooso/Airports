@@ -41,7 +41,7 @@ void swap(void** datos, size_t pos1, size_t pos2) {
     datos[pos2] = aux;
 }
 
-bool redimensionar(heap_t* heap, size_t nuevo_tamanio) {
+bool redimensiona(heap_t* heap, size_t nuevo_tamanio) {
     void** pointer = realloc(heap->datos, nuevo_tamanio * sizeof(void*));
     if(pointer == NULL) return false;
     heap->datos = pointer;
@@ -49,13 +49,13 @@ bool redimensionar(heap_t* heap, size_t nuevo_tamanio) {
     return true;
 }
 
-bool verificar_redimension(heap_t* heap) {
+bool verifica_redimension(heap_t* heap) {
     if(heap->cantidad == heap->tamanio) {
-        return redimensionar(heap, heap->tamanio*2);
+        return redimensiona(heap, heap->tamanio*2);
     }
     size_t nuevo_tamanio = heap->tamanio / 2;
     if(heap->cantidad <= heap->tamanio/4 && nuevo_tamanio >= TAMANIO_INICIAL) {
-        return redimensionar(heap, nuevo_tamanio);
+        return redimensiona(heap, nuevo_tamanio);
     }
     return true;
 }
@@ -188,7 +188,7 @@ bool heap_esta_vacio(const heap_t* heap) {
  * Post: se agregó un nuevo elemento al heap.
  */
 bool heap_encolar(heap_t* heap, void* elem) {
-    if(elem == NULL || !verificar_redimension(heap)) return false;
+    if(elem == NULL || !verifica_redimension(heap)) return false;
     heap->datos[heap->cantidad] = elem;
     heap->cantidad++;
     up_heap(heap->datos, heap->cantidad-1, heap->cmp);
@@ -210,7 +210,7 @@ void* heap_ver_max(const heap_t* heap) {
  * Post: el elemento desencolado ya no se encuentra en el heap.
  */
 void* heap_desencolar(heap_t* heap) {
-    if(heap_esta_vacio(heap) || !verificar_redimension(heap)) return NULL;
+    if(heap_esta_vacio(heap) || !verifica_redimension(heap)) return NULL;
     heap->cantidad--;
     void* aux = heap->datos[0];
     swap(heap->datos, 0, heap->cantidad);
