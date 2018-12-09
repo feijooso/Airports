@@ -9,6 +9,7 @@
 #include "agregar_archivo.c"
 #include "info_vuelos.c"
 #include "prioridades.c"
+#include "borrar.c"
 
 aerolinea_t* aerolinea_crear(abb_comparar_clave_t cmp, abb_destruir_dato_t destruir_dato_abb, hash_destruir_dato_t destruir_dato_hash) {
     aerolinea_t* aerolinea = malloc(sizeof(aerolinea_t));
@@ -53,10 +54,8 @@ void operar(char* input[], aerolinea_t* aerolinea) {
             printf("error\n");
         }
 
-
     } else if(strcmp(input[pos], "ver_tablero") == 0) {
         printf("ver_tablero\n");
-
 
     } else if(strcmp(input[pos], "info_vuelo") == 0) {
         pos++;
@@ -68,7 +67,6 @@ void operar(char* input[], aerolinea_t* aerolinea) {
             printf("error\n");
         }
 
-
     } else if(strcmp(input[pos], "prioridad_vuelos") == 0) {
         pos++;
         char* parametros[CANTIDAD_PARAMETROS_PRIORIDADES];
@@ -78,9 +76,16 @@ void operar(char* input[], aerolinea_t* aerolinea) {
         } else {
             printf("error\n");
         }
-
     } else if(strcmp(input[pos], "borrar") == 0) {
-        printf("borrar\n");
+        pos++;
+        char* parametros[CANTIDAD_PARAMETROS_BORRAR];
+        if(cantidad_parametros_correctos(input, pos, CANTIDAD_PARAMETROS_BORRAR, parametros)
+         && borrar(aerolinea, parametros)) {
+            printf("OK\n");
+        } else {
+            printf("error\n");
+        }
+
     } else {
         printf("error\n");
     }
