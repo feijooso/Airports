@@ -260,11 +260,16 @@ abb_iter_t *abb_iter_in_crear(abb_t *arbol, char* clave) {
         iter->actual = NULL;
         return iter;
     }
-    abb_nodo_t* nodo = buscar_padre(arbol, arbol->raiz, clave);
+    abb_nodo_t* nodo = arbol->raiz;
+
+    bool seguir = true;
     pila_apilar(iter->pila, nodo);
-    while(nodo->izq != NULL){
-        pila_apilar(iter->pila, nodo->izq);
-        nodo = nodo->izq;
+    while(nodo->izq != NULL && seguir){
+        if (strcmp(clave, nodo->izq->clave) > 0) seguir = false;
+        else { 
+            pila_apilar(iter->pila, nodo->izq);
+            nodo = nodo->izq;
+        }
     }
 
     iter->actual = pila_ver_tope(iter->pila);
@@ -315,7 +320,7 @@ void abb_iter_in_destruir(abb_iter_t* iter) {
 }
 
 void* abb_iter_borrar(abb_iter_t* iter) {
-    if(abb_iter_in_al_final(iter)) return false;
+    if(abb_iter_in_al_final(iter)) return NULL;
     abb_nodo_t* nodo_anterior = iter->actual;
     abb_iter_in_avanzar(iter);
     return abb_borrar(iter->arbol, nodo_anterior->clave);

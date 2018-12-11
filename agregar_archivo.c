@@ -12,7 +12,7 @@
 char* generar_clave_fecha_id(char* fecha, char* id) {
     size_t fecha_largo = strlen(fecha);
     size_t id_largo = strlen(id);
-    size_t respuesta_largo = fecha_largo + id_largo + 2; //fecha-id\0;
+    size_t respuesta_largo = fecha_largo + id_largo + 2; //fecha_id\0;
     char* respuesta = malloc(sizeof(char) * respuesta_largo);
     if(respuesta == NULL) return NULL;
     size_t i = 0;

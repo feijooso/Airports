@@ -1,1 +1,1 @@
-algueiza: tp2.c hash.c abb.c heap.c strutil.c
+algueiza: hash.o abb.o heap.o strutil.o pila.o

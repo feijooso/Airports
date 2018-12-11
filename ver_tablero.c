@@ -1,49 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include "strutil.h"
+#include "constantes.c"
 
-void ver_tablero(aerolinea_t* vuelos, char* input[],size_t pos){
-/*	char* parametros[4];
-	if(!cantidad_de_parametros_correcta(input,pos,4, parametros)) return false;
-*/	size_t n = parametros[0];
+bool ver_tablero(char* parametros[], aerolinea_t* vuelos){
+	int n = atoi(parametros[0]);
 	char* modo = parametros[1];
-	char* fecha_inicio = parametros[2];
-	char* fecha_fin = parametros[3];
-	void* tablero[] = malloc(sizeof(void*) * n);
-	char* vector_clave [2] = {fecha_inicio, 0000}
-	char* clave_inicial = join(vector_clave, ' - ')
+	char** tablero = malloc(sizeof(void*) * n);
+	char** vector_clavei = calloc(3, sizeof(char*));
+	vector_clavei[0] = parametros[2];
+	vector_clavei[1] = "0000";
+	char* clave_inicial = join(vector_clavei, '_');
+	char** vector_clavef = calloc(3,sizeof(char*));
+	vector_clavef[0] = parametros[3];
+	vector_clavef[1] = "9999";
+	char* clave_final = join(vector_clavef, '_');
 	abb_iter_t* iter = abb_iter_in_crear(vuelos->abb, clave_inicial);
-	int i = 0;
-	bool seguir = true;
-	abb_iter_in_avanzar(iter); //porque se inicializa en el padre (que tiene fecha anterior)
 	char* clave = abb_iter_in_ver_actual(iter);
-	char* datos[] = split(clave, '-');
-	while(i < n && seguir){
-		if (vuelos->abb->cmp(fecha_fin, datos[0]) > 0){
-			tablero[i] = datos;
-			seguir = abb_iter_in_avanzar(iter);
-			if (seguir){
-				datos = abb_iter_in_ver_actual(iter);
-				i++;
-			}
+	if (abb_iter_in_al_final(iter)) {
+		abb_iter_in_destruir(iter);
+		return false;
 	}
 
-	if(modo == asc){
+	int i = 0;
+	bool seguir = true;
+	while (seguir && strcmp(clave_final, clave) > 0 && (i < n)){
+		tablero[i] = clave;
+        abb_iter_in_avanzar(iter);
+		clave = abb_iter_in_ver_actual(iter);
+		if (clave == NULL) seguir = false;
+		i++;
 
-		for (int j = 0; j <= i; ++j) 
+	}
+	if(strcmp(modo, "asc") == 0){
+
+		for (int j = 0; j < i; ++j)
 		{
-			printf("%s",tablero[j][0]);
-			printf("%s",' - ');
-			printf("%s",tablero[j][1]);
+		    char** clave = split(tablero[j], '_');
+			printf("%s",clave[0]);
+			printf("%s"," - ");
+			printf("%s\n",clave[1]);
+			free_strv(clave);
 		}
 	}
 
-	if(modo == desc){
+	if(strcmp(modo, "desc") == 0){
 
 		for (int j = i; j >= 0; --j) 
 		{
-			printf("%s",tablero[j][0]);
-			printf("%s",' - ');
-			printf("%s",tablero[j][1]);
+            char** clave = split(tablero[j], '_');
+            printf("%s",clave[0]);
+            printf("%s"," - ");
+            printf("%s\n",clave[1]);
+			free_strv(clave);
 		}
 	}
-
+	free(tablero);
+	abb_iter_in_destruir(iter);
+	free(vector_clavef);
+	free(clave_final);
+	free(clave_inicial);
+	free(vector_clavei);
 	return true;
 }
