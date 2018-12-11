@@ -38,11 +38,11 @@ void aerolinea_destruir(aerolinea_t* aerolinea) {
 void operar(char* input[], aerolinea_t* aerolinea) {
     size_t pos = 0;
     if(!iterar_hasta_palabra_valida(input, &pos)) {
-        printf("error\n");
+        printf("ERROR\n");
         return; 
     }
     if(remover_enter(input, &pos)) {
-        printf("error\n");
+        printf("ERROR\n");
         return;
     }
     if(strcmp(input[pos], "agregar_archivo") == 0) {
@@ -52,7 +52,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
          && agregar_archivo(aerolinea, parametros, pos+1)) {
             printf("OK\n");         
         } else {
-            printf("error\n");
+            printf("ERROR\n");
         }
 
     } else if(strcmp(input[pos], "ver_tablero") == 0) {
@@ -62,7 +62,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
            && ver_tablero(parametros,aerolinea)) {
             printf("OK\n");
         } else {
-            printf("error\n");
+            printf("ERROR\n");
         }
 
     } else if(strcmp(input[pos], "info_vuelo") == 0) {
@@ -72,7 +72,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
            && info_vuelo(parametros,aerolinea)) {
             printf("OK\n");
         } else {
-            printf("error\n");
+            printf("ERROR\n");
         }
 
     } else if(strcmp(input[pos], "prioridad_vuelos") == 0) {
@@ -82,7 +82,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
            && prioridad_vuelos(parametros,aerolinea)) {
             printf("OK\n");
         } else {
-            printf("error\n");
+            printf("ERROR\n");
         }
     } else if(strcmp(input[pos], "borrar") == 0) {
         pos++;
@@ -91,11 +91,11 @@ void operar(char* input[], aerolinea_t* aerolinea) {
          && borrar(aerolinea, parametros)) {
             printf("OK\n");
         } else {
-            printf("error\n");
+            printf("ERROR\n");
         }
 
     } else {
-        printf("error\n");
+        printf("ERROR\n");
     }
 }
 
