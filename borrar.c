@@ -21,9 +21,6 @@ bool borrar(aerolinea_t* vuelos, char* parametros[]){
 	if(abb_iter_in_al_final(iter)) return true;
     pila_t* pila = pila_crear();
 	while(!abb_iter_in_al_final(iter) && strcmp(clave_final,abb_iter_in_ver_actual(iter)) > 0){
-		/*char** datos = split(abb_iter_in_ver_actual(iter),'_');
-		hash_borrar(vuelos->hash, datos[1]);
-		abb_iter_borrar(iter);*/
 		pila_apilar(pila,abb_iter_in_ver_actual(iter));
 		abb_iter_in_avanzar(iter);
 	}

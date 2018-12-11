@@ -275,18 +275,7 @@ abb_iter_t *abb_iter_in_crear(abb_t *arbol, char* clave) {
         iter->actual = NULL;
         return iter;
     }
-   /* abb_nodo_t* nodo = arbol->raiz;
-
-    bool seguir = true;
-
-    pila_apilar(iter->pila, nodo);
-    while(nodo->izq != NULL && seguir){
-        if (strcmp(clave, nodo->izq->clave) > 0) seguir = false;
-        else { 
-            pila_apilar(iter->pila, nodo->izq);
-            nodo = nodo->izq;
-        }
-    }*/
+   
    apilar(pila,arbol->raiz,clave);
 
     iter->actual = pila_ver_tope(iter->pila);
