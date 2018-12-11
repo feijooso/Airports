@@ -41,10 +41,8 @@ void operar(char* input[], aerolinea_t* aerolinea) {
         printf("ERROR\n");
         return; 
     }
-    if(remover_enter(input, &pos)) {
-        printf("ERROR\n");
-        return;
-    }
+    remover_enter(input, &pos);
+
     if(strcmp(input[pos], "agregar_archivo") == 0) {
         pos++;
         char* parametros[CANTIDAD_PARAMETROS_AGREGAR_ARCHIVO];
@@ -52,7 +50,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
          && agregar_archivo(aerolinea, parametros, pos+1)) {
             printf("OK\n");         
         } else {
-            printf("ERROR\n");
+            fprintf(stderr,"Error en comando agregar_archivo\n");
         }
 
     } else if(strcmp(input[pos], "ver_tablero") == 0) {
@@ -62,7 +60,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
            && ver_tablero(parametros,aerolinea)) {
             printf("OK\n");
         } else {
-            printf("ERROR\n");
+            fprintf(stderr,"Error en comando ver_tablero\n");
         }
 
     } else if(strcmp(input[pos], "info_vuelo") == 0) {
@@ -72,7 +70,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
            && info_vuelo(parametros,aerolinea)) {
             printf("OK\n");
         } else {
-            printf("ERROR\n");
+            fprintf(stderr,"Error en comando info_vuelo\n");
         }
 
     } else if(strcmp(input[pos], "prioridad_vuelos") == 0) {
@@ -82,7 +80,7 @@ void operar(char* input[], aerolinea_t* aerolinea) {
            && prioridad_vuelos(parametros,aerolinea)) {
             printf("OK\n");
         } else {
-            printf("ERROR\n");
+            fprintf(stderr,"Error en comando prioridad_vuelos\n");
         }
     } else if(strcmp(input[pos], "borrar") == 0) {
         pos++;
@@ -91,11 +89,11 @@ void operar(char* input[], aerolinea_t* aerolinea) {
          && borrar(aerolinea, parametros)) {
             printf("OK\n");
         } else {
-            printf("ERROR\n");
+            fprintf(stderr,"Error en comando borrar\n");
         }
 
     } else {
-        printf("ERROR\n");
+        fprintf(stderr,"ERROR\n");
     }
 }
 

@@ -48,7 +48,7 @@ bool ver_tablero(char* parametros[], aerolinea_t* vuelos){
 
 	if(strcmp(modo, "desc") == 0){
 
-		for (int j = i; j >= 0; --j) 
+		for (int j = i-1; j >= 0; --j)
 		{
             char** clave = split(tablero[j], '_');
             printf("%s",clave[0]);

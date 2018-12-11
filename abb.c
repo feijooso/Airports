@@ -243,6 +243,21 @@ void abb_in_order(abb_t *arbol, bool visitar(const char *, void *, void *), void
 
 /* PRIMITIVAS Y FUNCIONES AUXILIARES ITERADOR EXTERNO */
 
+void apilar(pila_t* pila, abb_nodo_t* nodo, char* clave){
+    if (nodo == NULL) return;
+    int cmp = strcmp(clave, nodo->clave);
+    if (cmp > 0) apilar(pila, nodo->der, clave);
+    if(cmp < 0) {
+        pila_apilar(pila,nodo);
+        apilar(pila,nodo->izq, clave);
+    }
+    if (cmp == 0){
+        pila_apilar(pila,nodo);
+        return;
+    }
+}
+
+
 abb_iter_t *abb_iter_in_crear(abb_t *arbol, char* clave) {
 
     abb_iter_t* iter = malloc(sizeof(abb_iter_t));
@@ -260,9 +275,10 @@ abb_iter_t *abb_iter_in_crear(abb_t *arbol, char* clave) {
         iter->actual = NULL;
         return iter;
     }
-    abb_nodo_t* nodo = arbol->raiz;
+   /* abb_nodo_t* nodo = arbol->raiz;
 
     bool seguir = true;
+
     pila_apilar(iter->pila, nodo);
     while(nodo->izq != NULL && seguir){
         if (strcmp(clave, nodo->izq->clave) > 0) seguir = false;
@@ -270,7 +286,8 @@ abb_iter_t *abb_iter_in_crear(abb_t *arbol, char* clave) {
             pila_apilar(iter->pila, nodo->izq);
             nodo = nodo->izq;
         }
-    }
+    }*/
+   apilar(pila,arbol->raiz,clave);
 
     iter->actual = pila_ver_tope(iter->pila);
 
@@ -319,9 +336,10 @@ void abb_iter_in_destruir(abb_iter_t* iter) {
 
 }
 
+/*
 void* abb_iter_borrar(abb_iter_t* iter) {
     if(abb_iter_in_al_final(iter)) return NULL;
     abb_nodo_t* nodo_anterior = iter->actual;
     abb_iter_in_avanzar(iter);
     return abb_borrar(iter->arbol, nodo_anterior->clave);
-}
+}*/
