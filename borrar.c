@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "strutil.h"
+#include "cola.h"
 
 bool borrar(aerolinea_t* vuelos, char* parametros[]){
 	if (strcmp(parametros[0], parametros[1]) > 0) return false;
@@ -19,15 +20,24 @@ bool borrar(aerolinea_t* vuelos, char* parametros[]){
 	abb_iter_t* iter = abb_iter_in_crear(vuelos->abb, clave_inicial);
 	if(iter == NULL) return false;
 	if(abb_iter_in_al_final(iter)) return true;
-    pila_t* pila = pila_crear();
+    cola_t* cola = cola_crear();
 	while(!abb_iter_in_al_final(iter) && strcmp(clave_final,abb_iter_in_ver_actual(iter)) > 0){
-		pila_apilar(pila,abb_iter_in_ver_actual(iter));
+		cola_encolar(cola,abb_iter_in_ver_actual(iter));
 		abb_iter_in_avanzar(iter);
 	}
-	while(!pila_esta_vacia(pila)){
-	    char* fecha_id = pila_desapilar(pila);
+	while(!cola_esta_vacia(cola)){
+	    char* fecha_id = cola_desencolar(cola);
         char** datos = split(fecha_id,'_');
-        hash_borrar(vuelos->hash, datos[1]);
+        char** vuelo = (char**)hash_obtener(vuelos->hash, datos[1]);
+        if (vuelo != NULL){
+			for (int i = 0; i < 9; i++) {
+				printf("%s ", vuelo[i]);
+			}
+			printf("%s", vuelo[9]);
+			printf("\n");
+			hash_borrar(vuelos->hash, datos[1]);
+		}       
+        
 	    abb_borrar(vuelos->abb, fecha_id);
 
 	    free_strv(datos);
@@ -36,7 +46,7 @@ bool borrar(aerolinea_t* vuelos, char* parametros[]){
 	free(vector_clavei);
 	free(clave_inicial);
 	free(clave_final);
-	pila_destruir(pila);
+	cola_destruir(cola, NULL);
 	abb_iter_in_destruir(iter);
 	return true;
 }
