@@ -15,11 +15,9 @@ int minimos(const void* a, const void* b){
     int pb = atoi(valoresb[PRIORIDAD]);
 	int res;
 	if(pa == pb) {
-		int ia = atoi(valoresa[ID]);
-		int ib = atoi(valoresb[ID]);
-		if(ia == ib) {
-			res = 0;
-		} else if(ia < ib) {
+		/*int ia = atoi(valoresa[ID]);
+		int ib = atoi(valoresb[ID]);*/
+		if(strcmp(valoresa[ID], valoresb[ID]) < 0) {
 			res = -1;
 		} else {
 			res = 1;
