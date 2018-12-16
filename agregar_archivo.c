@@ -54,7 +54,6 @@ bool leer_archivo(aerolinea_t* aerolinea, FILE* archivo) {
         remover_enter(vuelo, &posicion_ultimo_dato);
         char* abb_clave = generar_clave_fecha_id(vuelo[FECHA], vuelo[ID]);
         if(abb_clave == NULL) return false;
-
         if (!hash_pertenece(aerolinea->hash,vuelo[ID])){
             if(!abb_guardar(aerolinea->abb, abb_clave, vuelo)) {
                 free(abb_clave);

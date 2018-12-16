@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define LARGO_INICIAL 50
 #define CARGA 0.53
@@ -141,10 +142,13 @@ bool redimensionar(hash_t* hash) {
 	}
 	for(size_t i = 0; i < viejo_largo; i++) {
 		hash_campo_t* campo = vieja_tabla[i];
-		if(campo->estado == ocupado || campo->estado == borrado) {
+		if(campo->estado == ocupado) {
 			if(!hash_guardar(hash, campo->clave, campo->valor)) {
 				return false;
 			}
+			free(campo->clave);
+		}
+		if (campo->estado == borrado){
 			free(campo->clave);
 		}
 		free(campo);

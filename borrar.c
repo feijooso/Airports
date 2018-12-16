@@ -36,10 +36,10 @@ bool borrar(aerolinea_t* vuelos, char* parametros[]){
 			printf("%s", vuelo[9]);
 			printf("\n");
 			hash_borrar(vuelos->hash, datos[1]);
+
 		}       
         
-	    abb_borrar(vuelos->abb, fecha_id);
-
+	    free_strv(abb_borrar(vuelos->abb, fecha_id));
 	    free_strv(datos);
 	}
 	free(vector_clavef);
