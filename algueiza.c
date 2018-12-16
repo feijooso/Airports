@@ -1,4 +1,4 @@
-#define _XOPEN_SOURCE 700 // or any bigger number
+#define _XOPEN_SOURCE 700 
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -8,6 +8,7 @@ bool iterar_hasta_palabra_valida(char* input[], size_t* pos) {
         *pos += 1;
         if(input[*pos] == NULL) return false;
     }
+    
     return true;
 }
 

@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include "pila.h"
 
-/*ABB*/
 
 typedef struct abb abb_t;
 

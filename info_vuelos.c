@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+
 bool info_vuelo(char* input[], aerolinea_t* vuelos) {
 	char** vuelo = (char**)hash_obtener(vuelos->hash, input[0]);
 	if (vuelo == NULL) return false;
